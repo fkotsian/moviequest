@@ -1,20 +1,31 @@
 require 'sinatra'
 
-get '/'
+# FIX: added do statement to begin block
+get '/' do
   File.read('index.html')
 end
 
-get 'favorites' do
+# FIX: added starting '/' to GET route
+get '/favorites' do
   response.header['Content-Type'] = 'application/json'
   File.read('data.json')
 end
 
-get '/favorites' do
+# FIX: changed method to POST
+post '/favorites' do
   file = JSON.parse(File.read('data.json'))
+
+  # FIX: added end statement to complete `unless`
+  # - could also use `return ... unless ...` single-line pattern
   unless params[:name] && params[:oid]
     return 'Invalid Request'
+  end
+
   movie = { name: params[:name], oid: params[:oid] }
   file << movie
-  File.write('data.json',JSON.pretty_generate(file))
+  File.write('data.json', JSON.pretty_generate(file))
+
+  # FIX: added JSON Content-Type header
+  response.header['Content-Type'] = 'application/json'
   movie.to_json
 end
