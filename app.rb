@@ -2,7 +2,8 @@ require 'sinatra'
 
 # FIX: added do statement to begin block
 get '/' do
-  File.read('index.html')
+  # FIX: look inside views folder for index.html
+  File.read('views/index.html')
 end
 
 # FIX: added starting '/' to GET route

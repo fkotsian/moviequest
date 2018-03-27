@@ -1,0 +1,28 @@
+.pageWrap {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.searchForm {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchForm * {
+  margin-right: 2rem;
+}
+
+.searchResults {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  padding: 2rem;
+}
+
+.searchResults * {
+  margin-bottom: 1rem;
+}
