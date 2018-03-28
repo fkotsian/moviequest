@@ -54,7 +54,14 @@ function renderMovieResults(movies) {
   movies.forEach(movieJson => {
     let movie = document.createElement('div')
 
-    let movieTitle = document.createElement('h4')
+    let favoriteIcon = document.createElement('span')
+    favoriteIcon.innerHTML = '⭐'
+    favoriteIcon.onclick = saveMovie
+    favoriteIcon.dataset.title = movieJson['Title']
+    favoriteIcon.dataset.oid = movieJson['imdbID']
+    movie.appendChild(favoriteIcon)
+
+    let movieTitle = document.createElement('span')
     movieTitle.innerHTML = movieJson['Title']
     movieTitle.onclick = getDetails
     movie.appendChild(movieTitle)
@@ -98,6 +105,7 @@ function renderMovieDetails(details, movieElement) {
     movieItem.innerHTML = `${attr}: ${details[attr]}`
     movieDetails.appendChild(movieItem)
   })
+  // append movie poster
   let posterItem = document.createElement('li')
   let posterImage = document.createElement('img')
   posterImage.src = details['Poster']
@@ -136,4 +144,35 @@ function getDetails(movieTitleElement) {
       console.error("Error fetching movie details!")
       console.error(err)
     })
+}
+
+/*
+ * Save a movie title and oid to the Favorites list
+ * Returns: null
+ */
+function saveMovie(iconElement) {
+  let postUri = '/favorites'
+
+  let movieData = {
+    name: iconElement.target.dataset.title,
+    oid: iconElement.target.dataset.oid,
+  }
+
+  return window.fetch(
+    postUri,
+    {
+      method: 'POST',
+      body: JSON.stringify(movieData),
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
+  )
+  .then(res => {
+    return res.json()
+  })
+  .catch(err => {
+    console.error("Error favoriting movie!")
+    console.error(err)
+  })
 }
