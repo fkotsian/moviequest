@@ -1,10 +1,12 @@
-# MovieSearch!
+# MovieQuest!
 
 ## What is this?
 
 An API client to search the OMDB movie database for your favorite films, and save your favorites.
 
 Built in Vanilla JS.
+
+[Heroku: https://ga-moviequest.herokuapp.com/](https://ga-moviequest.herokuapp.com/)
 
 ## Implementation Details
 
@@ -46,5 +48,3 @@ Challenges:
 I find that the basic concepts of React can be taught in a few hours, but really mastering thinking in React takes a couple weeks to really sink in. It'd be exciting to introduce students to the concepts in a structured way, and help them really dig into lifecycles, components, and state management with Flux/Redux as they work through their projects.
 
 Thanks!
-
-- Frank
