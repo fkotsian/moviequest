@@ -33,22 +33,33 @@ function searchOMDB(movieName) {
 }
 
 /*
- * Insert the movie JSON into the DOM
+ * Clear the #searchResults div
  * Returns: null
  */
-function renderMovieResults(movies) {
-  // clear the `searchResults` div and append our new `movieContainer` div!
+function clearSearchResults() {
+  // clear the `searchResults` div
   let searchResultsElement = document.getElementById('searchResults')
+
   while (searchResultsElement.firstChild) {
     searchResultsElement.removeChild(searchResultsElement.firstChild)
   }
+}
 
+/*
+ * Append standardized movie data to the DOM
+ * Returns: null
+ */
+function appendMovies(movies) {
+  let searchResultsElement = document.getElementById('searchResults')
+
+  // provide some helper text if there are no movies
   if (!movies || movies.length === 0) {
     let noResults = document.createElement('div')
-    noResults.innerHTML = 'No matches were found for that title. Please try again!'
+    noResults.innerHTML = 'No movies found!'
     searchResultsElement.appendChild(noResults)
     return
   }
+
 
   // loop through the movie JSON and append a <div> for each movie
   movies.forEach(movieJson => {
@@ -72,18 +83,18 @@ function renderMovieResults(movies) {
 }
 
 /*
- * The master method: kick off the search process & tie the helper methods together
- * - calls the searchOMDB method (which fetches our JSON)
- * - passes result to renderMovieResults, which appends the movies to the DOM
+ * Search: call the OMDB API with our search query, and pass the result JSON
+ *  to our rendering function (which adds it to the DOM)
  * Returns: Promise
  */
 function search() {
   let movieNameElement = document.getElementById('movieName')
   let movieName = movieNameElement.value
 
-  return searchOMDB(movieName, renderMovieResults)
+  return searchOMDB(movieName)
     .then(moviesJson => {
-      return renderMovieResults(moviesJson)
+      clearSearchResults()
+      return appendMovies(moviesJson)
     })
     .catch(err => {
       console.error("Error searching OMDB!")
@@ -95,7 +106,7 @@ function search() {
  * Create a list of movie details and append it to the DOM
  * Returns: null
  */
-function renderMovieDetails(details, movieElement) {
+function appendMovieDetails(details, movieElement) {
   // create a list of movie details
   let movieDetails = document.createElement('ul')
 
@@ -138,7 +149,7 @@ function getDetails(movieTitleElement) {
 
   return requestMovieDetails(movieTitle)
     .then(detailsJson => {
-      return renderMovieDetails(detailsJson, movieDiv)
+      return appendMovieDetails(detailsJson, movieDiv)
     })
     .catch(err => {
       console.error("Error fetching movie details!")
