@@ -8,7 +8,11 @@
     <meta charset="UTF-8"></meta>
   </head>
   <body>
-    <div class="pageWrap">
+    <div class="header">
+      <span>MovieQuest!</span>
+      <a onClick="loadFavorites()">See All Favorites</a>
+    </div>
+    <div class="contentWrap">
       <div class="searchForm">
         <label for="movieName">Search for your favorite film!</label>
         <input type="text" name="movieName" id="movieName" autofocus />
@@ -16,9 +20,6 @@
       </div>
 
       <div class="searchResults" id="searchResults">
-        <h2>
-          Results!
-        </h2>
       </div>
     </div>
   </body>

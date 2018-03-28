@@ -21,7 +21,7 @@ const MOVIE_ATTRS = [
  * Returns: JSON
  */
 function searchOMDB(movieName) {
-  let searchUri = OMDB_API_URL + '/?apikey=' + OMDB_API_KEY + '&s=' + movieName + '&type=movie&r=json'
+  const searchUri = OMDB_API_URL + '/?apikey=' + OMDB_API_KEY + '&s=' + movieName + '&type=movie&r=json'
 
   return window.fetch(searchUri)
     .then(res => {
@@ -131,7 +131,7 @@ function appendMovieDetails(details, movieElement) {
  * Returns: Promise
  */
 function requestMovieDetails(title) {
-  let detailsUri = OMDB_API_URL + '/?apikey=' + OMDB_API_KEY + '&t=' + title + '&type=movie&plot=full&r=json'
+  const detailsUri = OMDB_API_URL + '/?apikey=' + OMDB_API_KEY + '&t=' + title + '&type=movie&plot=full&r=json'
 
   return window.fetch(detailsUri)
     .then(res => {
@@ -162,7 +162,7 @@ function getDetails(movieTitleElement) {
  * Returns: null
  */
 function saveMovie(iconElement) {
-  let postUri = '/favorites'
+  const postUri = '/favorites'
 
   let movieData = {
     name: iconElement.target.dataset.title,
@@ -186,4 +186,42 @@ function saveMovie(iconElement) {
     console.error("Error favoriting movie!")
     console.error(err)
   })
+}
+
+/*
+ * Fetch all favorites from our API
+ * Returns: JSON
+ */
+function fetchFavorites() {
+  const favoritesUri = '/favorites'
+
+  return window.fetch(favoritesUri)
+    .then(res => {
+      return res.json()
+    })
+}
+
+/*
+ * Fetch favorites from the API, then append them to the DOM
+ * Returns: null
+ */
+function loadFavorites() {
+  return fetchFavorites()
+    .then(favorites => {
+      // transform favorites into the standardized format understood by our
+      //  appendMovies method
+      let standardizedFaves = favorites.map(f => (
+        {
+          'Title': f.name,
+          'imdbID': f.oid,
+        }
+      ))
+
+      clearSearchResults()
+      appendMovies(standardizedFaves)
+    })
+    .catch(err => {
+      console.error("Error loading favorites!")
+      console.error(err)
+    })
 }
