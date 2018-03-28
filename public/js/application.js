@@ -15,30 +15,13 @@ const MOVIE_ATTRS = [
   'Plot',
 ]
 
-
 /*
- * Search the API for the submitted movie title
- * Returns: JSON
- */
-function searchOMDB(movieName) {
-  const searchUri = OMDB_API_URL + '/?apikey=' + OMDB_API_KEY + '&s=' + movieName + '&type=movie&r=json'
-
-  return window.fetch(searchUri)
-    .then(res => {
-      return res.json()
-    })
-    .then(json => {
-      return json['Search']
-    })
-}
-
-/*
- * Clear the #searchResults div
+ * Clear the #movies div
  * Returns: null
  */
-function clearSearchResults() {
-  // clear the `searchResults` div
-  let searchResultsElement = document.getElementById('searchResults')
+function clearMovies() {
+  // clear the `movies` div
+  let searchResultsElement = document.getElementById('movies')
 
   while (searchResultsElement.firstChild) {
     searchResultsElement.removeChild(searchResultsElement.firstChild)
@@ -50,7 +33,7 @@ function clearSearchResults() {
  * Returns: null
  */
 function appendMovies(movies) {
-  let searchResultsElement = document.getElementById('searchResults')
+  let searchResultsElement = document.getElementById('movies')
 
   // provide some helper text if there are no movies
   if (!movies || movies.length === 0) {
@@ -59,7 +42,6 @@ function appendMovies(movies) {
     searchResultsElement.appendChild(noResults)
     return
   }
-
 
   // loop through the movie JSON and append a <div> for each movie
   movies.forEach(movieJson => {
@@ -70,17 +52,35 @@ function appendMovies(movies) {
     favoriteIcon.onclick = saveMovie
     favoriteIcon.dataset.title = movieJson['Title']
     favoriteIcon.dataset.oid = movieJson['imdbID']
+    favoriteIcon.classList.add('clickable')
     movie.appendChild(favoriteIcon)
 
     let movieTitle = document.createElement('span')
     movieTitle.innerHTML = movieJson['Title']
-    movieTitle.onclick = getDetails
+    movieTitle.onclick = loadMovieDetails
+    movieTitle.classList.add('clickable')
     movie.appendChild(movieTitle)
 
     searchResultsElement.appendChild(movie)
   })
-
 }
+
+/*
+ * Search the API for the submitted movie title
+ * Returns: JSON
+ */
+function fetchSearchResults(movieName) {
+  const searchUri = OMDB_API_URL + '/?apikey=' + OMDB_API_KEY + '&s=' + movieName + '&type=movie&r=json'
+
+  return window.fetch(searchUri)
+    .then(res => {
+      return res.json()
+    })
+    .then(json => {
+      return json['Search']
+    })
+}
+
 
 /*
  * Search: call the OMDB API with our search query, and pass the result JSON
@@ -91,9 +91,9 @@ function search() {
   let movieNameElement = document.getElementById('movieName')
   let movieName = movieNameElement.value
 
-  return searchOMDB(movieName)
+  return fetchSearchResults(movieName)
     .then(moviesJson => {
-      clearSearchResults()
+      clearMovies()
       return appendMovies(moviesJson)
     })
     .catch(err => {
@@ -130,7 +130,7 @@ function appendMovieDetails(details, movieElement) {
  * Fetch the movie details from the OMDB API, by title
  * Returns: Promise
  */
-function requestMovieDetails(title) {
+function fetchMovieDetails(title) {
   const detailsUri = OMDB_API_URL + '/?apikey=' + OMDB_API_KEY + '&t=' + title + '&type=movie&plot=full&r=json'
 
   return window.fetch(detailsUri)
@@ -143,11 +143,11 @@ function requestMovieDetails(title) {
  * Request the movie details from the API and append them to the DOM
  * Returns: Promise
  */
-function getDetails(movieTitleElement) {
+function loadMovieDetails(movieTitleElement) {
   let movieTitle = movieTitleElement.target.innerHTML
   let movieDiv = movieTitleElement.target.parentElement
 
-  return requestMovieDetails(movieTitle)
+  return fetchMovieDetails(movieTitle)
     .then(detailsJson => {
       return appendMovieDetails(detailsJson, movieDiv)
     })
@@ -217,7 +217,7 @@ function loadFavorites() {
         }
       ))
 
-      clearSearchResults()
+      clearMovies()
       appendMovies(standardizedFaves)
     })
     .catch(err => {

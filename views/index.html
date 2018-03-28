@@ -10,16 +10,16 @@
   <body>
     <div class="header">
       <span>MovieQuest!</span>
-      <a onClick="loadFavorites()">See All Favorites</a>
+      <a class="clickable" onClick="loadFavorites()">See All Favorites</a>
     </div>
     <div class="contentWrap">
       <div class="searchForm">
         <label for="movieName">Search for your favorite film!</label>
         <input type="text" name="movieName" id="movieName" autofocus />
-        <button onClick="search()">Search</button>
+        <button class="clickable" onClick="search()">Search</button>
       </div>
 
-      <div class="searchResults" id="searchResults">
+      <div class="movies" id="movies">
       </div>
     </div>
   </body>

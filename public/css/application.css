@@ -24,15 +24,19 @@
   margin-right: 2rem;
 }
 
-.searchResults {
+.movies {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   padding: 2rem;
 }
 
-.searchResults * {
+.movies * {
   margin-bottom: 1rem;
+}
+
+.clickable {
+  cursor: pointer;
 }

@@ -9,16 +9,24 @@ end
 # added starting '/' to GET route
 get '/favorites' do
   response.header['Content-Type'] = 'application/json'
-  File.read('data.json')
+
+  file = File.read('data.json')
+  if file.length > 0
+    favorites = JSON.parse(file)
+  else
+    favorites = []
+  end
+
+  favorites.to_json
 end
 
 # changed method to POST
 post '/favorites' do
   file = File.read('data.json')
   if file.length > 0
-    movies_json = JSON.parse(file)
+    favorites = JSON.parse(file)
   else
-    movies_json = []
+    favorites = []
   end
 
   # use request body over query params for POST data
@@ -35,12 +43,12 @@ post '/favorites' do
 
   movie = { name: body['name'], oid: body['oid'] }
 
-  movie_exists = movies_json.any? { |saved_movie| saved_movie['oid'] == movie[:oid] }
+  movie_exists = favorites.any? { |fav| fav['oid'] == movie[:oid] }
 
   # do not re-write the movie if already favorited
   unless movie_exists
-    movies_json << movie
-    File.write('data.json', JSON.pretty_generate(movies_json))
+    favorites << movie
+    File.write('data.json', JSON.pretty_generate(favorites))
   end
 
   # added JSON Content-Type header
