@@ -1,4 +1,4 @@
-const OMDB_API_URL = 'http://www.omdbapi.com'
+const OMDB_API_URL = 'https://www.omdbapi.com'
 // NB: ideally, hide this key by making requests to the API from the server
 // - To make sure your key is secure:
 //  - load the key in from ENV via something like [Dotenv](https://github.com/bkeepers/dotenv)
