@@ -35,8 +35,27 @@
 
 .movies * {
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .clickable {
   cursor: pointer;
+}
+
+.movieTitle {
+  margin-left: .75rem;
+  margin-bottom: 1rem;
+}
+
+.details {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+}
+
+.detailsList {
+  list-style: none;
 }

@@ -59,6 +59,7 @@ function appendMovies(movies) {
     movieTitle.innerHTML = movieJson['Title']
     movieTitle.onclick = loadMovieDetails
     movieTitle.classList.add('clickable')
+    movieTitle.classList.add('movieTitle')
     movie.appendChild(movieTitle)
 
     searchResultsElement.appendChild(movie)
@@ -107,21 +108,23 @@ function search() {
  * Returns: null
  */
 function appendMovieDetails(details, movieElement) {
-  // create a list of movie details
-  let movieDetails = document.createElement('ul')
+  let movieDetails = document.createElement('div')
+  movieDetails.classList.add('details')
 
-  // create a list item for each movie attribute and add it to the details list
-  MOVIE_ATTRS.forEach(attr => {
-    let movieItem = document.createElement('li')
-    movieItem.innerHTML = `${attr}: ${details[attr]}`
-    movieDetails.appendChild(movieItem)
-  })
   // append movie poster
-  let posterItem = document.createElement('li')
-  let posterImage = document.createElement('img')
-  posterImage.src = details['Poster']
-  posterItem.appendChild(posterImage)
-  movieDetails.appendChild(posterItem)
+  let detailsImage = document.createElement('img')
+  detailsImage.src = details['Poster']
+  movieDetails.appendChild(detailsImage)
+
+  // create a list of movie details
+  let detailsList = document.createElement('ul')
+  detailsList.classList.add('detailsList')
+  MOVIE_ATTRS.forEach(attr => {
+    let detailItem = document.createElement('li')
+    detailItem.innerHTML = `${attr}: ${details[attr]}`
+    detailsList.appendChild(detailItem)
+  })
+  movieDetails.appendChild(detailsList)
 
   movieElement.appendChild(movieDetails)
 }
